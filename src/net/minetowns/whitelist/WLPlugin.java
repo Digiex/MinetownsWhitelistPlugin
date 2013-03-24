@@ -89,6 +89,13 @@ public class WLPlugin extends JavaPlugin implements Listener {
 								sender.getName() + " whitelisted " + pname);
 						sender.sendMessage(ChatColor.BLUE + "[Whitelist] "
 								+ pname + " whitelisted!");
+						for (Player p : this.getServer().getOnlinePlayers()) {
+							if (p.getName().equalsIgnoreCase(pname)) {
+								p.sendMessage(ChatColor.BLUE
+										+ "[Whitelist] You are now whitelisted. Enjoy your stay");
+								break;
+							}
+						}
 					} else {
 						sender.sendMessage(ChatColor.RED
 								+ "[Whitelist] /manuadd failed");
