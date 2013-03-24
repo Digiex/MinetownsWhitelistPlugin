@@ -34,7 +34,8 @@ public class WLPlugin extends JavaPlugin implements Listener {
 					+ ChatColor.BLUE
 					+ "[Whitelist] The following players have requested whitelisting: "
 					+ ChatColor.RED + "" + ChatColor.UNDERLINE
-					+ StringUtils.join(reqList, ", ");
+					+ StringUtils.join(reqList, ", ") + ChatColor.RESET
+					+ " Whitelist using /wl add <player>";
 		} else if (retNoPlayers) {
 			return ChatColor.BLUE + "[Whitelist] No players in whitelist queue";
 		}
@@ -120,6 +121,9 @@ public class WLPlugin extends JavaPlugin implements Listener {
 									+ "[Whitelist] You are now added to the whitelist waiting queue. Please contact an admin to get whitelisted.");
 						}
 					}
+				} else {
+					sender.sendMessage("[Whitelist] " + args[1]
+							+ " was already in the whitelist queue!");
 				}
 			} else if (args[0].equalsIgnoreCase("check")) {
 				if (args.length < 2) {
