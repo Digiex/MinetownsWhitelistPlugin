@@ -1,0 +1,10 @@
+name: MinetownsWhitelist
+author: jessenic
+main: net.minetowns.whitelist.WLPlugin
+version: 0.1
+commands:
+   wl:
+      description: Whitelist command
+      usage: /<command> [add|remove|list] (player)
+      permission: groupmanager.manuadd
+      permission-message: You don't have <permission>
