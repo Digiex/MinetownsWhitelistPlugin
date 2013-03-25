@@ -3,7 +3,10 @@ package net.minetowns.whitelist;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.milkbowl.vault.permission.Permission;
+
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,9 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WLPlugin extends JavaPlugin implements Listener {
+	
+	private Permission provider;
 
 	@EventHandler
 	public void OnPlayerJoin(PlayerJoinEvent e) {
@@ -45,6 +52,15 @@ public class WLPlugin extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(this, this);
+		getServer().getScheduler().runTaskTimer(this, new Runnable() {
+			public void run() {
+				for (Player player : getServer().getOnlinePlayers()) {
+					if (needsWhitelist(player)) {
+						player.sendMessage("Notice: Your not currently whitelisted and unable to build. Sign up and automatically whitelist @ Minetowns.net");
+					}
+				}
+			}
+		}, 300 * 20, 20);
 	}
 
 	@Override
@@ -136,9 +152,8 @@ public class WLPlugin extends JavaPlugin implements Listener {
 				if (args.length < 2) {
 					return false;
 				}
-				try { // TODO: Change this to something else:
-					if (this.getServer().getPlayer(args[1])
-							.hasPermission("iConomy.accounts.give")) {
+				try {
+					if (needsWhitelist(getServer().getPlayer(args[1]))) {
 						sender.sendMessage("true");
 					} else {
 						sender.sendMessage("false");
@@ -181,6 +196,24 @@ public class WLPlugin extends JavaPlugin implements Listener {
 		}
 		return false;
 	}
+	
+	private Permission getVault() {
+    	if (provider != null) {
+    		return provider;
+    	}
+		Plugin plugin = getServer().getPluginManager().getPlugin("Vault");
+		if (plugin == null || !(plugin instanceof net.milkbowl.vault.Vault)) {
+			getServer().getPluginManager().disablePlugin(this);
+			return null;
+		}
+		RegisteredServiceProvider<Permission> rsp = Bukkit.getServer()
+				.getServicesManager().getRegistration(Permission.class);
+		if (rsp == null) {
+			getServer().getPluginManager().disablePlugin(this);
+			return null;
+		}
+		return provider = rsp.getProvider();
+	}
 
 	public List<String> matchOfflinePlayer(String partialName) {
 		List<String> reqList = this.getConfig().getStringList("requests");
@@ -204,5 +237,9 @@ public class WLPlugin extends JavaPlugin implements Listener {
 			}
 		}
 		return matchedOfflinePlayers;
+	}
+	
+	public boolean needsWhitelist(Player player) {
+		return getVault().getPrimaryGroup(player).equals("Player");
 	}
 }

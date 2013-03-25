@@ -2,6 +2,7 @@ name: MinetownsWhitelist
 author: jessenic
 main: net.minetowns.whitelist.WLPlugin
 version: 0.1
+depend: [Vault]
 commands:
    wl:
       description: Whitelist command
