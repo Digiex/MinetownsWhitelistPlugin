@@ -60,7 +60,7 @@ public class WLPlugin extends JavaPlugin implements Listener {
 					}
 				}
 			}
-		}, 300 * 20, 20);
+		}, 20, 300 * 20);
 	}
 
 	@Override
