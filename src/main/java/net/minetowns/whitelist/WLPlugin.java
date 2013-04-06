@@ -51,6 +51,9 @@ public class WLPlugin extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
+            if (getVault() == null) {
++                getServer().getPluginManager().disablePlugin(this);
++            }
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getScheduler().runTaskTimer(this, new Runnable() {
 			public void run() {
