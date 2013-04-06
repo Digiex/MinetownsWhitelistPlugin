@@ -51,6 +51,9 @@ public class WLPlugin extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
+            if (getVault() == null) {
+                getServer().getPluginManager().disablePlugin(this);
+            }
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getScheduler().runTaskTimer(this, new Runnable() {
 			public void run() {
@@ -96,8 +99,6 @@ public class WLPlugin extends JavaPlugin implements Listener {
 				}
 				if (reqList.contains(pname)) {
 					this.getServer().dispatchCommand(sender, "lookup " + pname);
-					if (this.getServer().dispatchCommand(sender,
-							"manuadd " + pname + " Member")) {
 						reqList.remove(pname);
 						this.getConfig().set("requests", reqList);
 						this.saveConfig();
@@ -107,15 +108,12 @@ public class WLPlugin extends JavaPlugin implements Listener {
 								+ pname + " whitelisted!");
 						for (Player p : this.getServer().getOnlinePlayers()) {
 							if (p.getName().equalsIgnoreCase(pname)) {
+                                                            getVault().playerAddGroup(p, "Member");
 								p.sendMessage(ChatColor.BLUE
 										+ "[Whitelist] You are now whitelisted. Enjoy your stay");
 								break;
 							}
 						}
-					} else {
-						sender.sendMessage(ChatColor.RED
-								+ "[Whitelist] /manuadd failed");
-					}
 				} else {
 					sender.sendMessage(ChatColor.RED + "[Whitelist] Player "
 							+ pname + " not in the whitelisting queue. See /"
