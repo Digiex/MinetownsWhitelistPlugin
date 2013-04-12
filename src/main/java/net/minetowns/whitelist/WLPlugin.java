@@ -73,9 +73,9 @@ public class WLPlugin extends JavaPlugin implements Listener {
 			if (args.length < 1) {
 				return false;
 			}
-			if (!sender.isOp() && !sender.hasPermission("groupmanager.manuadd")) {
+			if (!sender.isOp()) {
 				sender.sendMessage(ChatColor.RED
-						+ "[Whitelist] You don't have groupmanager.manuadd permission!");
+						+ "[Whitelist] You don't have permission!");
 				return true;
 			}
 			List<String> reqList = this.getConfig().getStringList("requests");
@@ -100,7 +100,7 @@ public class WLPlugin extends JavaPlugin implements Listener {
 				if (reqList.contains(pname)) {
 					this.getServer().dispatchCommand(sender, "lookup " + pname);
 					if (this.getServer().dispatchCommand(sender,
-							"manuadd " + pname + " Member")) {
+							"pex user " + pname + " group set Member")) {
 						reqList.remove(pname);
 						this.getConfig().set("requests", reqList);
 						this.saveConfig();
@@ -117,7 +117,7 @@ public class WLPlugin extends JavaPlugin implements Listener {
 						}
 					} else {
 						sender.sendMessage(ChatColor.RED
-								+ "[Whitelist] /manuadd failed");
+								+ "[Whitelist] Pex set group failed");
 					}
 				} else {
 					sender.sendMessage(ChatColor.RED + "[Whitelist] Player "
