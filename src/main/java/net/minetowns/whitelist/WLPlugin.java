@@ -135,7 +135,8 @@ public class WLPlugin extends JavaPlugin implements Listener {
 					return false;
 				}
 				if (!needsWhitelist(player)) {
-					return false;
+					sender.sendMessage(player.getName() + " does not need to be whitelisted.");
+					return true;
 				}
 				if (!reqList.contains(args[1])) {
 					reqList.add(args[1]);
