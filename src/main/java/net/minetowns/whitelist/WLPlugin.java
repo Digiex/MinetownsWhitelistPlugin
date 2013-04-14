@@ -130,6 +130,13 @@ public class WLPlugin extends JavaPlugin implements Listener {
 				if (args.length < 2) {
 					return false;
 				}
+				Player player = getServer().getPlayer(args[1]);
+				if (player == null) {
+					return false;
+				}
+				if (!needsWhitelist(player)) {
+					return false;
+				}
 				if (!reqList.contains(args[1])) {
 					reqList.add(args[1]);
 					this.getConfig().set("requests", reqList);
